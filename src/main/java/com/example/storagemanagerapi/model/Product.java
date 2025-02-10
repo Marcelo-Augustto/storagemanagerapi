@@ -1,5 +1,6 @@
 package com.example.storagemanagerapi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,9 +19,6 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(nullable = false)
     private Double price;
 
     @Column(nullable = false)
@@ -28,4 +26,8 @@ public class Product {
 
     @Column(nullable = false)
     private String category;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Stock stock;
 }

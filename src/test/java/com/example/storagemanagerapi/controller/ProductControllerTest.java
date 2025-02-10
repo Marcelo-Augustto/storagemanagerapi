@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.example.storagemanagerapi.model.Stock;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,11 +31,12 @@ class ProductControllerTest {
     private ProductController productController;
 
     private Product product;
+    private Stock stock;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
-        product = new Product(1L, "Laptop", 10, 1500.00, "Gaming laptop with RTX 4070", "Electronics");
+        product = new Product(1L, "Laptop", 1500.00, "Gaming laptop with RTX 4070", "Electronics", new Stock(1L, product, 10, 2));
     }
 
     @Test
@@ -43,10 +46,11 @@ class ProductControllerTest {
 
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Laptop\",\"quantity\":10,\"price\":1500.00,\"description\":\"Gaming laptop with RTX 4070\",\"category\":\"Electronics\"}"))
-                .andExpect(status().isOk())
+                        .content("{\"name\":\"Laptop\",\"price\":1500.00,\"description\":\"Gaming laptop with RTX 4070\",\"category\":\"Electronics\",\"stock\":{\"quantity\":10,\"minimumStockLevel\":2}}"))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.category").value("Electronics"));
+                .andExpect(jsonPath("$.category").value("Electronics"))
+                .andExpect(jsonPath("$.stock.quantity").value(10));
 
         verify(productService, times(1)).createProduct(any(Product.class));
     }
@@ -59,7 +63,8 @@ class ProductControllerTest {
         mockMvc.perform(get("/api/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Laptop"))
-                .andExpect(jsonPath("$.category").value("Electronics"));
+                .andExpect(jsonPath("$.category").value("Electronics"))
+                .andExpect(jsonPath("$.stock.quantity").value(10));
 
         verify(productService, times(1)).getProductById(1L);
     }
@@ -67,15 +72,16 @@ class ProductControllerTest {
     @Test
     @Order(3)
     void testUpdateProduct() throws Exception {
-        Product updatedProduct = new Product(1L, "Gaming Laptop", 5, 1800.00, "Updated laptop description", "Electronics");
+        Product updatedProduct = new Product(1L, "Gaming Laptop", 1800.00, "Updated laptop description", "Electronics", new Stock(1L, product, 15, 3));
         when(productService.updateProduct(eq(1L), any(Product.class))).thenReturn(updatedProduct);
 
         mockMvc.perform(put("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Gaming Laptop\",\"quantity\":5,\"price\":1800.00,\"description\":\"Updated laptop description\",\"category\":\"Electronics\"}"))
+                        .content("{\"name\":\"Gaming Laptop\",\"price\":1800.00,\"description\":\"Updated laptop description\",\"category\":\"Electronics\",\"stock\":{\"quantity\":15,\"minimumStockLevel\":3}}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Gaming Laptop"))
-                .andExpect(jsonPath("$.price").value(1800.00));
+                .andExpect(jsonPath("$.price").value(1800.00))
+                .andExpect(jsonPath("$.stock.quantity").value(15));
 
         verify(productService, times(1)).updateProduct(eq(1L), any(Product.class));
     }
