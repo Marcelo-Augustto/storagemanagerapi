@@ -38,7 +38,7 @@ public class Order {
     private double totalAmount;
 
     public void calculateTotalAmount() {
-        this.totalAmount = items.stream()
+        this.totalAmount = (items == null) ? 0 : items.stream()
                 .mapToDouble(OrderItem::getTotalPrice)
                 .sum();
     }

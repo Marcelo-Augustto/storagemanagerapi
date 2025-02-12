@@ -23,7 +23,6 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setItems(new ArrayList<>());
-        order.calculateTotalAmount();
 
         for (OrderItem item : items) {
             // Fetch the product using productId
@@ -46,6 +45,7 @@ public class OrderService {
             item.setOrder(order);
             order.getItems().add(item);
         }
+        order.calculateTotalAmount();
 
         return orderRepository.save(order);
     }
