@@ -13,7 +13,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // Allow all requests
                 )
                 .csrf(csrf -> csrf.disable()) // Disable CSRF (for development)
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())); // Updated method for Spring Security 6
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
