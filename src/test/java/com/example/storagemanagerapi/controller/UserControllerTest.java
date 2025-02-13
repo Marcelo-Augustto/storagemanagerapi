@@ -1,5 +1,6 @@
 package com.example.storagemanagerapi.controller;
 
+import com.example.storagemanagerapi.auth.JwtUtil;
 import com.example.storagemanagerapi.model.User;
 import com.example.storagemanagerapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -27,10 +30,12 @@ public class UserControllerTest {
     private UserService userService;
 
     private User user;
+    private String jwtToken;
 
     @BeforeEach
     public void setup() {
-        user = new User(1L, "john_doe", "password123", "john.doe@example.com", "USER");
+        user = new User(1L, "john_doe", "password123", "john.doe@example.com", "ADMIN");
+        jwtToken = JwtUtil.generateToken(user.getUsername());
     }
 
     @Test
@@ -49,21 +54,22 @@ public class UserControllerTest {
     @Test
     @Order(2)
     public void testLoginUser() throws Exception {
-        when(userService.loginUser("john_doe", "password123")).thenReturn(String.valueOf(java.util.Optional.of(user)));
+        when(userService.loginUser("john_doe", "password123")).thenReturn(jwtToken);
 
         mockMvc.perform(post("/api/users/login")
                         .param("username", "john_doe")
                         .param("password", "password123"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Login successful"));
+                .andExpect(content().string(jwtToken));
     }
 
     @Test
     @Order(3)
     public void testGetUserDetails() throws Exception {
-        when(userService.getUserById(1L)).thenReturn(java.util.Optional.of(user));
+        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
 
-        mockMvc.perform(get("/api/users/1"))
+        mockMvc.perform(get("/api/users/1")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("john_doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
@@ -77,6 +83,7 @@ public class UserControllerTest {
         when(userService.updateUser(eq(1L), any(User.class))).thenReturn(updatedUser);
 
         mockMvc.perform(put("/api/users/1")
+                        .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"john_doe_updated\",\"password\":\"newpassword123\",\"email\":\"john.doe_updated@example.com\",\"role\":\"ADMIN\"}"))
                 .andExpect(status().isOk())
@@ -89,7 +96,8 @@ public class UserControllerTest {
     public void testDeleteUser() throws Exception {
         doNothing().when(userService).deleteUser(1L);
 
-        mockMvc.perform(delete("/api/users/1"))
+        mockMvc.perform(delete("/api/users/1")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User deleted successfully"));
     }
