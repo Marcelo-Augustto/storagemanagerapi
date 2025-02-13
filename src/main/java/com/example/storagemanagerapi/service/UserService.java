@@ -1,5 +1,6 @@
 package com.example.storagemanagerapi.service;
 
+import com.example.storagemanagerapi.auth.JwtUtil;
 import com.example.storagemanagerapi.model.User;
 import com.example.storagemanagerapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> loginUser(String username, String password) {
-        return userRepository.findByUsername(username)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
+    public String loginUser(String username, String password) {
+        Optional<User> user = userRepository.findByUsername(username)
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
+
+        return user.map(u -> JwtUtil.generateToken(username))
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
     }
 
     public Optional<User> getUserById(Long id) {

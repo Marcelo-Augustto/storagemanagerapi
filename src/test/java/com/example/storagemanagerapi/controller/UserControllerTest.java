@@ -49,7 +49,7 @@ public class UserControllerTest {
     @Test
     @Order(2)
     public void testLoginUser() throws Exception {
-        when(userService.loginUser("john_doe", "password123")).thenReturn(java.util.Optional.of(user));
+        when(userService.loginUser("john_doe", "password123")).thenReturn(String.valueOf(java.util.Optional.of(user)));
 
         mockMvc.perform(post("/api/users/login")
                         .param("username", "john_doe")

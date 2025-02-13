@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -21,8 +19,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        Optional<User> user = userService.loginUser(username, password);
-        return user.isPresent() ? ResponseEntity.ok("Login successful") : ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.ok(userService.loginUser(username, password));
     }
 
     //get
