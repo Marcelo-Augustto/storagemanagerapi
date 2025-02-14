@@ -22,7 +22,7 @@ This is a **Spring Boot** application for managing inventory, orders, and user a
 ### 1. Clone the Repository
 ```sh
 git clone https://github.com/Marcelo-Augustto/storagemanagerapi
-cd storagemanagementapi
+cd storagemanagerapi
 ```
 
 ### 2. Configure the Database
