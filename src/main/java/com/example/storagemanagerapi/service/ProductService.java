@@ -1,5 +1,7 @@
 package com.example.storagemanagerapi.service;
 
+import com.example.storagemanagerapi.exception.product.ProductAlreadyExistsException;
+import com.example.storagemanagerapi.exception.product.ProductNotFoundException;
 import com.example.storagemanagerapi.model.Product;
 import com.example.storagemanagerapi.model.Stock;
 import com.example.storagemanagerapi.repository.ProductRepository;
@@ -7,13 +9,11 @@ import com.example.storagemanagerapi.repository.StockRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final StockRepository stockRepository;
-
 
     public ProductService(ProductRepository productRepository, StockRepository stockRepository) {
         this.productRepository = productRepository;
@@ -26,10 +26,14 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(Product product) {
+        if (productRepository.findByName(product.getName()).isPresent()) {
+            throw new ProductAlreadyExistsException(product.getName());
+        }
+
         Product savedProduct = productRepository.save(product);
 
         Stock stock = new Stock();
@@ -49,10 +53,13 @@ public class ProductService {
                     product.setCategory(updatedProduct.getCategory());
                     return productRepository.save(product);
                 })
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
         productRepository.deleteById(id);
     }
 }

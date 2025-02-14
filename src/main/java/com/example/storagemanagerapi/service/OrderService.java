@@ -1,6 +1,10 @@
 package com.example.storagemanagerapi.service;
 
 import com.example.storagemanagerapi.enums.OrderStatus;
+import com.example.storagemanagerapi.exception.stock.InsufficientStockException;
+import com.example.storagemanagerapi.exception.order.OrderNotFoundException;
+import com.example.storagemanagerapi.exception.product.ProductNotFoundException;
+import com.example.storagemanagerapi.exception.stock.StockNotFoundException;
 import com.example.storagemanagerapi.model.*;
 import com.example.storagemanagerapi.repository.OrderRepository;
 import com.example.storagemanagerapi.repository.ProductRepository;
@@ -25,34 +29,32 @@ public class OrderService {
         order.setItems(new ArrayList<>());
 
         for (OrderItem item : items) {
-            // Fetch the product using productId
             Product product = productRepository.findById(item.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new ProductNotFoundException(item.getProductId()));
 
             Stock stock = stockRepository.findByProductId(product.getId())
-                    .orElseThrow(() -> new RuntimeException("Stock record not found"));
+                    .orElseThrow(() -> new StockNotFoundException(product.getId()));
 
             if (stock.getQuantity() < item.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for " + product.getName());
+                throw new InsufficientStockException(product.getName());
             }
 
             stock.setQuantity(stock.getQuantity() - item.getQuantity());
             stockRepository.save(stock);
 
-            // Set the product in OrderItem
             item.setProduct(product);
             item.setPrice(product.getPrice());
             item.setOrder(order);
             order.getItems().add(item);
         }
-        order.calculateTotalAmount();
 
+        order.calculateTotalAmount();
         return orderRepository.save(order);
     }
 
     public Order updateOrderStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         order.setStatus(status);
         return orderRepository.save(order);
@@ -64,7 +66,7 @@ public class OrderService {
 
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     public void cancelOrder(Long orderId) {
