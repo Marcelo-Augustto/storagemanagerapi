@@ -2,6 +2,7 @@ package com.example.storagemanagerapi.controller;
 
 import com.example.storagemanagerapi.model.Report;
 import com.example.storagemanagerapi.service.ReportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/reports")
 @Tag(name = "Reports", description = "APIs for generating reports")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class ReportController {
 
     private final ReportService reportService;

@@ -4,6 +4,7 @@ import com.example.storagemanagerapi.model.Product;
 import com.example.storagemanagerapi.service.ProductService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/products")
 @Tag(name = "Products", description = "API for managing products")
+@SecurityRequirement(name = "bearerAuth")
 public class ProductController {
     private final ProductService productService;
 

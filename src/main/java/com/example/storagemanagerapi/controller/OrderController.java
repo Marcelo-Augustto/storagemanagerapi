@@ -6,6 +6,7 @@ import com.example.storagemanagerapi.model.OrderItem;
 import com.example.storagemanagerapi.model.User;
 import com.example.storagemanagerapi.service.OrderService;
 import com.example.storagemanagerapi.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,14 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 @Tag(name = "Order Management", description = "APIs for handling orders")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class OrderController {
 
     private final OrderService orderService;
     private final UserService userService;
 
     @PostMapping("/{userId}")
-    @Operation(summary = "Create an order", description = "Creates an order for a given user")
+    @Operation(summary = "Create an order", security = @SecurityRequirement(name = "bearerAuth"), description = "Creates an order for a given user")
     public ResponseEntity<Order> createOrder(@PathVariable Long userId, @RequestBody List<OrderItem> items) {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -35,14 +37,14 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/status")
-    @Operation(summary = "Update order status", description = "Updates the status of an order")
+    @Operation(summary = "Update order status", security = @SecurityRequirement(name = "bearerAuth"), description = "Updates the status of an order")
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
         Order updatedOrder = orderService.updateOrderStatus(orderId, status);
         return ResponseEntity.ok(updatedOrder);
     }
 
     @GetMapping("/{userId}")
-    @Operation(summary = "Get user orders", description = "Retrieves all orders for a given user")
+    @Operation(summary = "Get user orders", security = @SecurityRequirement(name = "bearerAuth"), description = "Retrieves all orders for a given user")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -50,13 +52,13 @@ public class OrderController {
     }
 
     @GetMapping("/details/{orderId}")
-    @Operation(summary = "Get order details", description = "Fetches details of a specific order")
+    @Operation(summary = "Get order details", security = @SecurityRequirement(name = "bearerAuth"), description = "Fetches details of a specific order")
     public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
     @DeleteMapping("/{orderId}")
-    @Operation(summary = "Cancel order", description = "Cancels an order")
+    @Operation(summary = "Cancel order", security = @SecurityRequirement(name = "bearerAuth"), description = "Cancels an order")
     public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();

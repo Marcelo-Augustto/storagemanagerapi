@@ -2,6 +2,7 @@ package com.example.storagemanagerapi.controller;
 
 import com.example.storagemanagerapi.model.User;
 import com.example.storagemanagerapi.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "User Management", description = "APIs for user management")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     @Autowired
     private UserService userService;

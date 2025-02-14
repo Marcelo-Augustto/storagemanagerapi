@@ -2,6 +2,7 @@ package com.example.storagemanagerapi.controller;
 
 import com.example.storagemanagerapi.model.Stock;
 import com.example.storagemanagerapi.service.StockService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/stocks")
 @Tag(name = "Stock Management", description = "APIs for managing stock levels")
+@SecurityRequirement(name = "bearerAuth")
 public class StockController {
     private final StockService stockService;
 
