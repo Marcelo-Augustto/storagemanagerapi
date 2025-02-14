@@ -108,57 +108,121 @@ mvnw test
 
 ## 📁 Project Structure 
 ```sh
-storagemanagementapi/
-│── src/
-│   ├── main/
-│   │   ├── java/com/example/storagemanagerapi/
-│   │   │   ├── auth/
-│   │   │   │   ├── JwtFilter.java
-│   │   │   │   ├── JwtUtil.java
-│   │   │   ├── auth/
-│   │   │   │   ├── SecurityConfig.java
-│   │   │   ├── controller/
-│   │   │   │   ├── UserController.java
-│   │   │   │   ├── ProductController.java
-│   │   │   │   ├── OrderController.java
-│   │   │   │   ├── StockController.java
-│   │   │   │   ├── ReportController.java
-│   │   │   ├── model/
-│   │   │   │   ├── User.java
-│   │   │   │   ├── Product.java
-│   │   │   │   ├── Order.java
-│   │   │   │   ├── OrderItem.java
-│   │   │   │   ├── Stock.java
-│   │   │   │   ├── Report.java
-│   │   │   ├── repository/
-│   │   │   │   ├── UserRepository.java
-│   │   │   │   ├── ProductRepository.java
-│   │   │   │   ├── OrderRepository.java
-│   │   │   │   ├── StockRepository.java
-│   │   │   │   ├── ReportRepository.java
-│   │   │   ├── service/
-│   │   │   │   ├── UserService.java
-│   │   │   │   ├── ProductService.java
-│   │   │   │   ├── OrderService.java
-│   │   │   │   ├── StockService.java
-│   │   │   │   ├── ReportService.java
-│   │   │   ├── StorageManagerApiApplication.java
-│   │   ├── resources 
-│   │   │   ├── application.properties
-│   ├── test/
-│   │   ├── java/com/example/storagemanagerapi/
-│   │   │   ├── controller/
-│   │   │   │   ├── UserControllerTest.java
-│   │   │   │   ├── ProductControllerTest.java
-│   │   │   │   ├── OrderControllerTest.java
-│   │   │   ├── StorageManagerApiApplicationTests.java
-│   │   │   ├── TestStorageManagerApiApplication.java
-│   │   │   ├── TestcontainersConfiguration.java   
-│── .gitattributes 
-│── .gitignore
-│── compose.yaml
-│── mvnw
-│── mvnw.cmd
-│── pom.xml
-│── README.md
+.
+├── compose.yaml
+├── HELP.md
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── example
+│   │   │           └── storagemanagerapi
+│   │   │               ├── auth
+│   │   │               │   ├── JwtFilter.java
+│   │   │               │   └── JwtUtil.java
+│   │   │               ├── config
+│   │   │               │   └── SecurityConfig.java
+│   │   │               ├── controller
+│   │   │               │   ├── IndexController.java
+│   │   │               │   ├── OrderController.java
+│   │   │               │   ├── ProductController.java
+│   │   │               │   ├── ReportController.java
+│   │   │               │   ├── StockController.java
+│   │   │               │   └── UserController.java
+│   │   │               ├── enums
+│   │   │               │   └── OrderStatus.java
+│   │   │               ├── model
+│   │   │               │   ├── OrderItem.java
+│   │   │               │   ├── Order.java
+│   │   │               │   ├── Product.java
+│   │   │               │   ├── Report.java
+│   │   │               │   ├── Stock.java
+│   │   │               │   └── User.java
+│   │   │               ├── repository
+│   │   │               │   ├── OrderRepository.java
+│   │   │               │   ├── ProductRepository.java
+│   │   │               │   ├── ReportRepository.java
+│   │   │               │   ├── StockRepository.java
+│   │   │               │   └── UserRepository.java
+│   │   │               ├── service
+│   │   │               │   ├── OrderService.java
+│   │   │               │   ├── ProductService.java
+│   │   │               │   ├── ReportService.java
+│   │   │               │   ├── StockService.java
+│   │   │               │   └── UserService.java
+│   │   │               └── StorageManagerApiApplication.java
+│   │   └── resources
+│   │       ├── application.properties
+│   │       ├── static
+│   │       └── templates
+│   └── test
+│       └── java
+│           └── com
+│               └── example
+│                   └── storagemanagerapi
+│                       ├── controller
+│                       │   ├── OrderControllerTest.java
+│                       │   ├── ProductControllerTest.java
+│                       │   └── UserControllerTest.java
+│                       ├── StorageManagerApiApplicationTests.java
+│                       ├── TestcontainersConfiguration.java
+│                       └── TestStorageManagerApiApplication.java
+└── target
+    ├── classes
+    │   ├── application.properties
+    │   └── com
+    │       └── example
+    │           └── storagemanagerapi
+    │               ├── auth
+    │               │   ├── JwtFilter.class
+    │               │   └── JwtUtil.class
+    │               ├── config
+    │               │   └── SecurityConfig.class
+    │               ├── controller
+    │               │   ├── IndexController.class
+    │               │   ├── OrderController.class
+    │               │   ├── ProductController.class
+    │               │   ├── ReportController.class
+    │               │   ├── StockController.class
+    │               │   └── UserController.class
+    │               ├── enums
+    │               │   └── OrderStatus.class
+    │               ├── model
+    │               │   ├── Order.class
+    │               │   ├── OrderItem.class
+    │               │   ├── Product.class
+    │               │   ├── Report.class
+    │               │   ├── Stock.class
+    │               │   └── User.class
+    │               ├── repository
+    │               │   ├── OrderRepository.class
+    │               │   ├── ProductRepository.class
+    │               │   ├── ReportRepository.class
+    │               │   ├── StockRepository.class
+    │               │   └── UserRepository.class
+    │               ├── service
+    │               │   ├── OrderService.class
+    │               │   ├── ProductService.class
+    │               │   ├── ReportService.class
+    │               │   ├── StockService.class
+    │               │   └── UserService.class
+    │               └── StorageManagerApiApplication.class
+    ├── generated-sources
+    │   └── annotations
+    ├── generated-test-sources
+    │   └── test-annotations
+    └── test-classes
+        └── com
+            └── example
+                └── storagemanagerapi
+                    ├── controller
+                    │   ├── OrderControllerTest.class
+                    │   ├── ProductControllerTest.class
+                    │   └── UserControllerTest.class
+                    ├── StorageManagerApiApplicationTests.class
+                    ├── TestcontainersConfiguration.class
+                    └── TestStorageManagerApiApplication.class
 ```
