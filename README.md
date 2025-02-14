@@ -154,7 +154,7 @@ storagemanagementapi/
 │   │   │   ├── StorageManagerApiApplicationTests.java
 │   │   │   ├── TestStorageManagerApiApplication.java
 │   │   │   ├── TestcontainersConfiguration.java   
-│── . gitattributes 
+│── .gitattributes 
 │── .gitignore
 │── compose.yaml
 │── mvnw
