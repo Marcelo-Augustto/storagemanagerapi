@@ -1,4 +1,4 @@
-# Storage Management System - API
+# Storage Manager System - API
 
 ## 📖 Overview
 This is a **Spring Boot** application for managing inventory, orders, and user authentication in a storage management system. It includes **JWT-based authentication** and API documentation with **Swagger**.
