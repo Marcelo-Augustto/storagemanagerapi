@@ -102,7 +102,7 @@ to explore and test the API endpoints.
 ## 🧪 Running Tests 
 The project includes unit tests and integration tests using JUnit and Mockito. To run all tests:
 ```sh
-mvn test
+mvnw test
 ```
 
 
