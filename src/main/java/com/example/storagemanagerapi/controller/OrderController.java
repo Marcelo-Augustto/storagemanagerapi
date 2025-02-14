@@ -1,6 +1,7 @@
 package com.example.storagemanagerapi.controller;
 
 import com.example.storagemanagerapi.enums.OrderStatus;
+import com.example.storagemanagerapi.exception.user.UserNotFoundException;
 import com.example.storagemanagerapi.model.Order;
 import com.example.storagemanagerapi.model.OrderItem;
 import com.example.storagemanagerapi.model.User;
@@ -16,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/orders")
 @Tag(name = "Order Management", description = "APIs for handling orders")
@@ -30,8 +30,7 @@ public class OrderController {
     @PostMapping("/{userId}")
     @Operation(summary = "Create an order", security = @SecurityRequirement(name = "bearerAuth"), description = "Creates an order for a given user")
     public ResponseEntity<Order> createOrder(@PathVariable Long userId, @RequestBody List<OrderItem> items) {
-        User user = userService.getUserById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.getUserById(userId);
         Order order = orderService.createOrder(user, items);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
@@ -46,8 +45,7 @@ public class OrderController {
     @GetMapping("/{userId}")
     @Operation(summary = "Get user orders", security = @SecurityRequirement(name = "bearerAuth"), description = "Retrieves all orders for a given user")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
-        User user = userService.getUserById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.getUserById(userId);
         return ResponseEntity.ok(orderService.getUserOrders(user));
     }
 
@@ -64,4 +62,5 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 }
+
 

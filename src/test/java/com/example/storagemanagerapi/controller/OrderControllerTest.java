@@ -76,7 +76,7 @@ public class OrderControllerTest {
 
     @Test
     public void testCreateOrder() throws Exception {
-        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+        when(userService.getUserById(1L)).thenReturn(user);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(stockRepository.findByProductId(1L)).thenReturn(Optional.of(stock));
         when(orderService.createOrder(eq(user), anyList())).thenReturn(order);
@@ -105,7 +105,7 @@ public class OrderControllerTest {
 
     @Test
     public void testGetUserOrders() throws Exception {
-        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+        when(userService.getUserById(1L)).thenReturn(user);
         when(orderService.getUserOrders(user)).thenReturn(Collections.singletonList(order));
 
         mockMvc.perform(get("/api/orders/1")

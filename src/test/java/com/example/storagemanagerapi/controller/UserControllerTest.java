@@ -66,7 +66,7 @@ public class UserControllerTest {
     @Test
     @Order(3)
     public void testGetUserDetails() throws Exception {
-        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+        when(userService.getUserById(1L)).thenReturn(user);
 
         mockMvc.perform(get("/api/users/1")
                         .header("Authorization", "Bearer " + jwtToken))
