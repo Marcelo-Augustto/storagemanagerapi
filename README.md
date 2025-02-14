@@ -114,6 +114,7 @@ mvnw test
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
+├── README.md
 ├── src
 │   ├── main
 │   │   ├── java
@@ -124,7 +125,8 @@ mvnw test
 │   │   │               │   ├── JwtFilter.java
 │   │   │               │   └── JwtUtil.java
 │   │   │               ├── config
-│   │   │               │   └── SecurityConfig.java
+│   │   │               │   ├── SecurityConfig.java
+│   │   │               │   └── SwaggerConfig.java
 │   │   │               ├── controller
 │   │   │               │   ├── IndexController.java
 │   │   │               │   ├── OrderController.java
@@ -134,6 +136,23 @@ mvnw test
 │   │   │               │   └── UserController.java
 │   │   │               ├── enums
 │   │   │               │   └── OrderStatus.java
+│   │   │               ├── exception
+│   │   │               │   ├── GlobalExceptionHandler.java
+│   │   │               │   ├── order
+│   │   │               │   │   └── OrderNotFoundException.java
+│   │   │               │   ├── product
+│   │   │               │   │   ├── ProductAlreadyExistsException.java
+│   │   │               │   │   └── ProductNotFoundException.java
+│   │   │               │   ├── report
+│   │   │               │   │   ├── DataUnavailableException.java
+│   │   │               │   │   └── ReportNotFoundException.java
+│   │   │               │   ├── stock
+│   │   │               │   │   ├── InsufficientStockException.java
+│   │   │               │   │   └── StockNotFoundException.java
+│   │   │               │   └── user
+│   │   │               │       ├── InvalidCredentialsException.java
+│   │   │               │       ├── UserAlreadyExistsException.java
+│   │   │               │       └── UserNotFoundException.java
 │   │   │               ├── model
 │   │   │               │   ├── OrderItem.java
 │   │   │               │   ├── Order.java
