@@ -10,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Order Management", description = "APIs for handling orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -23,6 +26,7 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping("/{userId}")
+    @Operation(summary = "Create an order", description = "Creates an order for a given user")
     public ResponseEntity<Order> createOrder(@PathVariable Long userId, @RequestBody List<OrderItem> items) {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -31,26 +35,31 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/status")
+    @Operation(summary = "Update order status", description = "Updates the status of an order")
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
         Order updatedOrder = orderService.updateOrderStatus(orderId, status);
         return ResponseEntity.ok(updatedOrder);
     }
 
     @GetMapping("/{userId}")
+    @Operation(summary = "Get user orders", description = "Retrieves all orders for a given user")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
         User user = userService.getUserById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));;
+                .orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(orderService.getUserOrders(user));
     }
 
     @GetMapping("/details/{orderId}")
+    @Operation(summary = "Get order details", description = "Fetches details of a specific order")
     public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
     @DeleteMapping("/{orderId}")
+    @Operation(summary = "Cancel order", description = "Cancels an order")
     public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();
     }
 }
+
